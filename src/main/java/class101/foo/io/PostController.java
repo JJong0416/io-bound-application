@@ -11,6 +11,12 @@ public class PostController {
     @Autowired
     PostRepository postRepository;
 
+    // 0. 테스트를 해보자
+    @GetMapping("/test")
+    public String test(){
+        return "hello io-bound-application";
+    }
+
     // 1. 글을 작성한다.
     @PostMapping("/post")
     public Post createPost(@RequestBody Post post) {
