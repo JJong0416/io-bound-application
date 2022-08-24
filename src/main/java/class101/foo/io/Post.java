@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Data
 @Entity(name = "post")
 public class Post {
-//     test webhook test test test.
+//     test webhook test test test.1
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "post_id_seq")
     @SequenceGenerator(name="post_id_seq", sequenceName = "post_id_seq", allocationSize = 1)
