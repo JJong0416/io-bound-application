@@ -1,7 +1,8 @@
 package class101.foo.io;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,6 +17,11 @@ public class PostController {
     private final PostRepository postRepository;
     private final Integer PAGE_SIZE = 20;
 
+    /* 메세지 큐에 넣기 위해서 */
+    private final Producer producer;
+
+    /* 잭슨 라이브러리를 사용하기 위해서 */
+    private final ObjectMapper objectMapper;
 
     // 0. 테스트를 해보자
     @GetMapping("/test")
@@ -25,8 +31,10 @@ public class PostController {
 
     // 1. 글을 작성한다.
     @PostMapping("/post")
-    public Post createPost(@RequestBody Post post) {
-        return postRepository.save(post);
+    public Post createPost(@RequestBody Post post) throws JsonProcessingException {
+        String jsonPost = objectMapper.writeValueAsString(post);
+        producer.sendTo(jsonPost);
+        return post;
     }
 
     // 2. 글 목록을 페이징하여 반환
