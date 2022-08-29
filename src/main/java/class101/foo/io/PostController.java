@@ -15,6 +15,7 @@ import java.util.List;
 public class PostController {
 
     private final PostRepository postRepository;
+    private final PostCacheService postCacheService;
     private final Integer PAGE_SIZE = 20;
 
     /* 메세지 큐에 넣기 위해서 */
@@ -40,9 +41,13 @@ public class PostController {
     // 2. 글 목록을 페이징하여 반환
     @GetMapping("/posts")
     public Page<Post> getPostList(@RequestParam(defaultValue = "1") Integer page) {
-        return postRepository.findAll(
-                PageRequest.of(page-1, PAGE_SIZE, Sort.by("id").descending())
-        );
+        if(page.equals(1)){
+            return postCacheService.getFirstPostPage();
+        } else{
+            return postRepository.findAll(
+                    PageRequest.of(page-1, PAGE_SIZE, Sort.by("id").descending())
+            );
+        }
     }
     // 3. 글 번호로 조회
     @GetMapping("/post/{id}")
