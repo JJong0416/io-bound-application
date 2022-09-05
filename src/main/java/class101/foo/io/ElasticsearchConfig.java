@@ -14,7 +14,7 @@ import java.util.List;
 
 @Configuration(proxyBeanMethods = false)
 public class ElasticsearchConfig {
-    @Value("#{'${spring.data.elasticsearch.hosts}'.split(',')}")
+    @Value("#{'${spring.data.elasticsearch.host}'.split(',')}")
     private List<String> hosts;
 
     @Value("${spring.data.elasticsearch.port}")
